@@ -26,18 +26,17 @@ else
   fi
 fi
 
-# create the env variables required by terraform to set up the state bucket and lock mechanism
-curr_date=$(date "+%Y-%m-%d")
+# verify the env variables required for the state bucket and state lock
 if [ -z "$TF_VAR_tf_state_bucket" ]
 then
-  echo "environment variable for state bucket not set - setting default.";
-  export TF_VAR_tf_state_bucket="app-iac-demo-state-${curr_date}"
+  echo "environment variable for state bucket not set - halting script. Please set manually (preferably in your shell config file).";
+  exit 1
 fi
 
 if [ -z "$TF_VAR_tf_state_lock" ]
 then
-  echo "enviornment variable for state lock not set - setting default.";
-  export TF_VAR_tf_state_lock="app-iac-demo-lock-${curr_date}"
+  echo "enviornment variable for state lock not set - halting script. Please set manually (preferably in your shell config file).";
+  exit 1
 fi
 
 # applying bucket and table lock resources to AWS
