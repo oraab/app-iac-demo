@@ -7,7 +7,7 @@ if [[ $(terraform) == *"init"* ]]
 then 
   echo "terraform installed on host; moving on."
 else
-  echo "terraform not installed on host - installing."
+  echo "terraform not installed on host - installing.";
   brew update && brew install terraform 
 fi
 
@@ -18,37 +18,45 @@ then
 else 
   echo "aws cli not installed on host - installing."
   if [[ $(python --version) == *"2.7"* ]]
+  then
     brew update && brew install awscli
   else 
     echo "host does not have correct version of python for AWS CLI - halting script, please install manually."
     exit 1
+  fi
 fi
 
 # create the env variables required by terraform to set up the state bucket and lock mechanism
 curr_date=$(date "+%Y-%m-%d")
 if [ -z "$TF_VAR_tf_state_bucket" ]
 then
-  echo "environment variable for state bucket not set - setting default."
-  export TF_VAR_tf_state_bucket="app-iac-demo-state-${curr_date}";
+  echo "environment variable for state bucket not set - setting default.";
+  export TF_VAR_tf_state_bucket="app-iac-demo-state-${curr_date}"
 fi
 
 if [ -z "$TF_VAR_tf_state_lock" ]
 then
-  echo "enviornment variable for state lock not set - setting default."
-  export TF_VAR_tf_state_lock="app-iac-demo-lock-${curr_date}";
+  echo "enviornment variable for state lock not set - setting default.";
+  export TF_VAR_tf_state_lock="app-iac-demo-lock-${curr_date}"
 fi
 
 # applying bucket and table lock resources to AWS
-echo "initializing terraform state (this will take a while if you don't have the AWS provider installed yet)"
-cd live/global/s3/
-terraform init 
-echo "running terraform plan to verify resources creation"
-if [[ $(terraform plan) == *"Plan: 2 to add, 0 to change, 0 to destroy"* ]]
-then
-  echo "terraform plan succeeded, continuing to apply." 
-  terraform apply
+if [[ $(aws s3api head-bucket --bucket $TF_VAR_tf_state_bucket) == *"200 OK"* ]]
+then 
+  echo "state bucket already exists; moving on."
 else 
-  echo "errors in terraform plan - halting init script."
-  exit 1
-fi  
+  echo "initializing terraform state (this will take a while if you don't have the AWS provider installed yet)";
+  cd live/global/s3/;
+  terraform init;
+  echo "running terraform plan to verify resources creation";
+  if [[ $(terraform plan) == *"2 to add, 0 to change, 0 to destroy"* ]]
+  then
+    echo "terraform plan succeeded, continuing to apply."; 
+    terraform apply
+  else 
+    echo "errors in terraform plan - halting init script.";
+    exit 1
+  fi
+fi
+
   
