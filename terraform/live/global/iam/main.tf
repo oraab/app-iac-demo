@@ -50,6 +50,11 @@ resource "aws_iam_group_policy_attachment" "app_iac_demo_runner_group_route53_li
   policy_arn = "${aws_iam_policy.app_iac_demo_runner_route53_limited_access.arn}"
 }
 
+resource "aws_iam_group_policy_attachment" "app_iac_demo_runner_group_kms_limited_access" {
+  group      = "${aws_iam_group.app_iac_demo_runner_group.name}"
+  policy_arn = "${aws_iam_policy.app_iac_demo_runner_kms_limited_access.arn}"
+}
+
 resource "aws_iam_policy" "app_iac_demo_runner_certificate_limited_access" {
 	name = "app_iac_demo_runner_certificate_limited_access"
 	policy = "${data.aws_iam_policy_document.certificate_limited_access.json}"
@@ -81,6 +86,21 @@ data "aws_iam_policy_document" "route53_limited_access" {
         "route53:CreateHostedZone",
         "route53:DeleteHostedZone",
         "route53:ChangeResourceRecordSets"
+	  ]
+	  resources = ["*"]
+	}
+}
+
+resource "aws_iam_policy" "app_iac_demo_runner_kms_limited_access" {
+	# required for aws_acm_certificate_validation
+	name = "app_iac_demo_runner_kms_limited_access"
+	policy = "${data.aws_iam_policy_document.kms_limited_access.json}"
+}
+
+data "aws_iam_policy_document" "kms_limited_access" {
+	statement {
+	  actions = [
+        "kms:CreateGrant"
 	  ]
 	  resources = ["*"]
 	}
