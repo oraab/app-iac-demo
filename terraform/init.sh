@@ -2,6 +2,8 @@
 
 # this script verifies and/or initializes everything the local environment expects in order to run the automated processes to generate the infrastructure, testing harness and deployment pipeline
 
+SCRIPT_HOME=$(pwd)
+
 # verify terraform is installed and install if not 
 if [[ $(terraform) == *"init"* ]]
 then 
@@ -26,6 +28,12 @@ else
   fi
 fi
 
+# create keypair for the application instances 
+cd $HOME/.ssh/
+ssh-keygen -t rsa -C app_iac_demo_key -f app_iac_demo_key.pem
+PUBKEY=$(pwd)/app_iac_demo_key.pem.pub
+aws ec2 import-key-pair --key_name app_iac_demo_key --public_key_material $(cat ${PUBKEY} | base64)
+
 # verify the env variables required for the state bucket and state lock
 if [ -z "$TF_VAR_tf_state_bucket" ]
 then
@@ -45,7 +53,7 @@ then
   echo "state bucket already exists; moving on."
 else 
   echo "initializing terraform state (this will take a while if you don't have the AWS provider installed yet)";
-  cd live/global/s3/;
+  cd $SCRIPT_HOME/live/global/s3/;
   terraform init;
   echo "running terraform plan to verify resources creation";
   if [[ $(terraform plan) == *"2 to add, 0 to change, 0 to destroy"* ]]

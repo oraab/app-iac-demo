@@ -11,7 +11,7 @@ resource "aws_security_group_rule" "alb_internal_inbound_http" {
 	from_port = 80
 	to_port = 80
 	protocol = "tcp"
-	cidr_blocks = ["${var.ingress_ip}/32"]	
+	cidr_blocks = ["${var.ingress_cidr_block}"]	
 	security_group_id = aws_security_group.alb.id
 }
 
@@ -26,4 +26,11 @@ resource "aws_security_group_rule" "alb_external_inbound_https" {
 	security_group_id = aws_security_group.alb.id
 }
 
-# TODO: add egress rule
+resource "aws_security_group_rule" "alb_external_outbound_all" {
+	type = "egress" 
+	from_port = 0
+	to_port = 0
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+	security_group_id = aws_security_group.alb.id
+}

@@ -14,10 +14,10 @@ variable "environment" {
 	type = string
 }
 
-variable "ingress_ip" {
-	description = "An IP from which the ALB will receive incoming traffic over HTTP port (optional - will not be used if the internal variable is not set)"
+variable "ingress_cidr_block" {
+	description = "A CIDR block from which the ALB will receive incoming traffic over HTTP port (optional - will not be used if the internal variable is not set)"
 	type = string 
-	default = "0.0.0.0"
+	default = "0.0.0.0/0"
 }
 
 variable "vpc_cidr_block" {

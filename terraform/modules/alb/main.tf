@@ -1,5 +1,5 @@
 locals {
-	page_not_found_status_code = "404"
+	success_status_code = "200"
 	http_port = "80"
 }
 
@@ -32,8 +32,8 @@ resource "aws_lb_listener" "http" {
 
       fixed_response {
         content_type = "text/plain"
-        message_body = "${local.page_not_found_status_code}: Page not found"
-        status_code = "${local.page_not_found_status_code}"
+        message_body = "${local.success_status_code} OK"
+        status_code = "${local.success_status_code}"
       }
     }
 }
@@ -56,13 +56,31 @@ resource "aws_lb_listener" "http_reroute" {
     }
 }
 
-# TODO: add HTTPS listener after having the certificates
+# this resource would become https listening on 443 but is set as HTTP for now
+resource "aws_lb_listener" "https" {
+	count = var.internal ? 0 : 1
+    
+    load_balancer_arn = "${aws_lb.alb.arn}"
+    port = "80"
+    protocol = "HTTP"
+
+    default_action {
+      type = "fixed-response"
+
+      fixed_response {
+        content_type = "text/plain"
+        message_body = "${local.success_status_code} OK"
+        status_code = "${local.success_status_code}"
+      }
+    }
+}
 
 module "alb_security_group" {
  	source = "../security-group"
 	name = var.name
 	vpc_id = module.main_vpc.vpc_id
-	ingress_ip = var.ingress_ip
+	ingress_cidr_block = var.ingress_cidr_block
+	internal = var.internal
 }
 
 module "main_vpc" {
