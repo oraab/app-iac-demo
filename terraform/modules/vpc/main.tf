@@ -19,3 +19,12 @@ resource "aws_vpc" "main" {
 		Name = "${var.vpc_name}-${var.environment}"
 	}
 }
+
+resource "aws_internet_gateway" "main_ig" {
+	vpc_id = "${aws_vpc.main.id}"
+
+	tags = {
+	  Name = "main_ig"
+	  deployedBy = "terraform"
+	}
+}

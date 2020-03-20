@@ -5,7 +5,7 @@ variable "name" {
 
 variable "internal" {
   description = "Is the ALB internal or internet facing? (optional - default=false)"
-  type = boolean 
+  type = bool 
   default = false 
 }
 
@@ -26,10 +26,16 @@ variable "vpc_cidr_block" {
 	default = "10.0.0.0"
 }
 
-variable "subnet_cidr_block" {
-	description = "The required CIDR block for the subnet within the VPC (prefix will be 24, no need to add it)" 
+variable "main_subnet_cidr_block" {
+	description = "The required CIDR block for the main subnet within the VPC (prefix will be 24, no need to add it)" 
 	type = string
 	default = "10.0.1.0"
+}
+
+variable "alternate_az_subnet_cidr_block" {
+	description = "The required CIDR block for the alternate AZ subnet within the VPC (prefix will be 24, no need to add it)"
+	type = string
+	default = "10.0.2.0"
 }
 
 variable "vpc_name" {
