@@ -4,7 +4,7 @@ resource "aws_security_group" "alb" {
 	vpc_id = var.vpc_id
 }
 
-resource "aws_security_group_rule" "alb_internal_ingress_rule" {
+resource "aws_security_group_rule" "alb_internal_inbound_http" {
 	count = var.internal ? 1 : 0
 
 	type = "ingress"
@@ -15,7 +15,7 @@ resource "aws_security_group_rule" "alb_internal_ingress_rule" {
 	security_group_id = aws_security_group.alb.id
 }
 
-resource "aws_security_group_rule" "alb_external_ingress_rule" {
+resource "aws_security_group_rule" "alb_external_inbound_https" {
 	count = var.internal ? 0 : 1
 
 	type = "ingress" 
@@ -25,3 +25,5 @@ resource "aws_security_group_rule" "alb_external_ingress_rule" {
 	cidr_blocks = ["0.0.0.0/0"]
 	security_group_id = aws_security_group.alb.id
 }
+
+# TODO: add egress rule
