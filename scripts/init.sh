@@ -96,7 +96,7 @@ else
   if [[ $(terraform plan) == *"2 to add, 0 to change, 0 to destroy"* ]]
   then
     echo "terraform plan succeeded, continuing to apply."; 
-    terraform apply
+    terraform apply -auto-approve
   else 
     echo "errors in terraform plan - halting init script.";
     exit 1

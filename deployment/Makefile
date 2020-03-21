@@ -8,7 +8,7 @@ build-infra:
 	./build_infra.sh ${ENVIRONMENT} ${DOMAIN_NAME}
 
 test-infra:
-	go test -v ../tests/...
+	go test -v ../terraform/tests/...
 
 build:
 	$(eval APP_NAME := $$APP_NAME)
