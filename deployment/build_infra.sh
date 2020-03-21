@@ -27,7 +27,7 @@ then
     echo "terraform plan succeeded, continuing to apply."; 
     terraform apply -auto-approve
   else 
-    echo "errors in terraform plan - halting init script.";
+    echo "errors in terraform plan - halting build_infra script.";
     exit 1
   fi
 else 
@@ -38,7 +38,7 @@ repository_url=$(terraform output repository_url)
 export REPOSITORY_URL=$repository_url 
 echo "Repository URL: ${REPOSITORY_URL}"
 
-# checking if certificate for HTTPS connection ecists and creating if not
+# checking if certificate for HTTPS connection exists and creating if not
 if [[ $(aws acm list-certificates) == *"${domain_name}"* ]]
 then 
   echo "certificate for domain ${domain_name} exists - moving on."
@@ -56,7 +56,7 @@ else
     echo "terraform plan succeeded, continuing to apply."; 
     terraform apply -auto-approve
   else 
-    echo "errors in terraform plan - halting init script.";
+    echo "errors in terraform plan - halting build_infra script.";
     exit 1
   fi
 fi
@@ -70,11 +70,13 @@ terraform init -upgrade=false \
     -backend-config=region=us-east-1 \
     -backend-config=dynamodb_table=${TF_VAR_tf_state_lock} \
     -backend-config=encrypt=true
-if [[ $(terraform plan) == *"29 to add, 0 to change, 0 to destroy"* ]]
+# pending on changes in the infrastructure the number of added/changed/destroyed resources is going to change and fail this check without reason.
+#  in this case we just want to know that the terraform plan run got to the end and declared how many resources it's going to add    
+if [[ $(terraform plan) == *"to add"* ]]
 then
   echo "terraform plan succeeded, continuing to apply."; 
   terraform apply -auto-approve
 else 
-  echo "errors in terraform plan - halting init script.";
+  echo "errors in terraform plan - halting build_infra script.";
   exit 1
 fi 

@@ -9,7 +9,7 @@ resource "aws_launch_configuration" "app_iac_launch_config" {
   # keypair is uploaded in init script
   key_name = "app_iac_demo_key"
   user_data = var.user_data
-  iam_instance_profile = module.ec2_role.name
+  iam_instance_profile = module.instance_profile.name
   
   lifecycle { 
     create_before_destroy = true
@@ -60,7 +60,9 @@ resource "aws_security_group" "instance_sg" {
   }
 }
 
-resource "aws_security_group_rule" "instance_inbound_http" {
+resource "aws_security_group_rule" "instance_inbound_http_all" {
+  count = var.environment == "production" ? 1 : 0
+
   description = "HTTP access to instance"
   type = "ingress"
   from_port = 8080
@@ -105,3 +107,5 @@ resource "aws_lb_target_group" "app_iac_alb_target_group" {
     unhealthy_threshold = 2
   }
 }
+
+data ""

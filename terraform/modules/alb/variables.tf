@@ -23,7 +23,7 @@ variable "ingress_cidr_block" {
 variable "vpc_cidr_block_first_octets" {
 	description = "The first two octets required for the CIDR block of the VPC (CIDR block with 16 prefix will be extended)"
 	type = string
-	default = "10.0"
+	default = "172.20"
 }
 
 variable "vpc_name" {

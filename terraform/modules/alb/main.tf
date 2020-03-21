@@ -1,6 +1,5 @@
 locals {
 	page_not_found_status_code = "404"
-	http_port = "80"
 }
 
 resource "aws_lb" "alb" {

@@ -13,3 +13,7 @@ output "subnet_ids" {
 output "vpc_id" {
 	value = module.main_vpc.vpc_id
 }
+
+output "lb_security_group_id" {
+	value = module.alb_security_group.security_group_id
+}

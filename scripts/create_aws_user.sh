@@ -8,7 +8,6 @@ then
 else 
   export TF_VAR_user_name="iam-demo-runner"
 fi
-echo "${TF_VAR_user_name}"
 
 get_user_response=$(aws iam get-user --user-name $TF_VAR_user_name 2>&1)
 if [[ $get_user_response == *"NoSuchEntity"* ]]

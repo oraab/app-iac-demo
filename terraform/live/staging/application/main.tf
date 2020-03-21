@@ -1,4 +1,5 @@
 module "staging_application" {
+	# values are hard coded in these modules to provide clear documentation of changes
 	source = "../../../modules/application"
 
 	environment = "staging"
@@ -8,7 +9,7 @@ module "staging_application" {
     instance_type = "t2.micro"
     internal = true
     ingress_cidr_block = "141.226.14.213/32" # replace this with your own IP if you need
-
+	vpc_cidr_block_first_octets = "172.20"
     user_data = data.template_file.user_data.rendered 
 }
 

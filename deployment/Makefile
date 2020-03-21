@@ -1,13 +1,14 @@
 RELEASE_NAME := $(shell git --no-pager log -1 --format=v%ad-%h --date=format:'%Y%m%d-%H%M%S')
 TAG_NAME := $(ENVIRONMENT)-images:$(RELEASE_NAME)
 
-.PHONY: build-infra build push 
+.PHONY: build-infra build push deploy deploy-staging deploy-production
 
 build-infra:
 	chmod 755 build_infra.sh
-	$(eval ENVIRONMENT := $$ENVIRONMENT)
-	$(eval DOMAIN_NAME := $$DOMAIN_NAME)
 	./build_infra.sh ${ENVIRONMENT} ${DOMAIN_NAME}
+
+test-infra:
+	go test -v ../tests/...
 
 build:
 	$(eval APP_NAME := $$APP_NAME)
@@ -22,7 +23,7 @@ push:
 deploy:
 	make push
 	chmod 755 deploy.sh
-	./deploy.sh ${ENVIRONMENT} ${ECR_REPO} ${TAG_NAME}
+	./deploy.sh ${ENVIRONMENT} ${ECR_REPO} ${TAG_NAME} ${DOMAIN_NAME}
 
 deploy-staging: 
 	make deploy ENVIRONMENT=staging

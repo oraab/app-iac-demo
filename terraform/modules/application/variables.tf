@@ -48,10 +48,8 @@ variable "ingress_cidr_block" {
 	default = "0.0.0.0/0"
 }
 
-
-
-
-
-
-
-
+variable "vpc_cidr_block_first_octets" {
+	description = "The first two octets required for the VPC's CIDR block - the remaining CIDR block and the prefix (16) will be extended."
+	type = string
+	default = "172.20"
+}

@@ -50,6 +50,15 @@ else
   fi
 fi
 
+# verify go is installed and install if not
+if [[ $(go) == *"Go is a tool for managing Go source code"* ]]
+then 
+  echo "go installed on host; moving on."
+else 
+  echo "go not installed on host - installing."
+  brew update && brew install go 
+fi
+
 # create keypair for the application instances 
 cd $HOME/.ssh/
 ssh-keygen -t rsa -C app_iac_demo_key -f app_iac_demo_key.pem
