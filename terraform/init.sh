@@ -30,6 +30,8 @@ then
 else
   echo "terraform not installed on host - installing.";
   brew update && brew install terraform 
+  cat "plugin_cache_dir   = \"$HOME/.terraform.d/plugin-cache\"" > $HOME/.terraformrc
+  cat "disable_checkpoint = true" >> $HOME/.terraformrc
 fi
 
 

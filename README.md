@@ -5,6 +5,9 @@ Performs the following:
 
 1. Creates infrastructure for deployment of app: VPC and subnets, ASG with launch configuration, ALB and target groups based on the separate requirements for staging and production.
 1. provides a build and deployment pipeline through `makefile` and `docker push/pull` to/from ECR.  The deployment is done through template on the launch configurations which runs a post deploy script that pulls the docker image from ECR and runs it, deploying a small web server (as demo, can be replaced by anything with `Dockerfile`).  The launch configuration and ASG are set up to change and be recreated with every deployment. 
+1. Staging environment is blocked for internal usage by inclusion of specific IP (provided within application infra config) to be added to the security group ingress of the ALB and the instances 
+1. The instances are accessible by SSH for direct installation of whatever is required (although the application instances already have `curl`, `htop` and `tcpdump`)
+1. Production environment includes two instances behind a load balancer accessible through HTTPS connection using the registered domain provided. 
 
 ## pre-requisites 
 1. *AWS IAM user* that has the relevant permissions to create resources for this app.  A user can be created for you when you run `create_aws_user.sh` from the root, but it also assumes that you have an AWS IAM user with relevant credentials on your machine that can create a user with relevant permissions on IAM.
@@ -25,6 +28,9 @@ export TF_VAR_tf_state_lock=<the name you want to call the dynamodb lock table>
 1. `cd deployment; make build-infra` - this will build the ECR repo and will issue an ACM certificate for the registered domain you've chosen. This will also build the infra for the application with a demo application. 
 
 ## deployment
+The `code` directory contains a sample app that is used to deploy an application to staging and production when the infra is initialized. 
+It can be replaced with any code repository that contains a Dockerfile.
+
 `cd deployment; make deploy-<environment> APP_NAME=<give a name to the application - this is only for the docker image> ECR_REPO=<ecr repo - available to you as env var REPOSITORY_URL after running make build-infra>`
 
 ## testing harness (for terraform)

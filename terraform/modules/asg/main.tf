@@ -9,10 +9,15 @@ resource "aws_launch_configuration" "app_iac_launch_config" {
   # keypair is uploaded in init script
   key_name = "app_iac_demo_key"
   user_data = var.user_data
+  iam_instance_profile = module.ec2_role.name
   
   lifecycle { 
     create_before_destroy = true
   }
+}
+
+module "instance_profile" {
+  source = "../ec2_role"
 }
 
 resource "aws_autoscaling_group" "app_iac_autoscaling_group" {
