@@ -4,7 +4,7 @@ resource "aws_security_group" "alb" {
 	vpc_id = var.vpc_id
 }
 
-resource "aws_security_group_rule" "alb_internal_inbound_http" {
+resource "aws_security_group_rule" "alb_internal_inbound_http_restricted" {
 	count = var.internal ? 1 : 0
 
 	type = "ingress"
@@ -12,6 +12,17 @@ resource "aws_security_group_rule" "alb_internal_inbound_http" {
 	to_port = 80
 	protocol = "tcp"
 	cidr_blocks = ["${var.ingress_cidr_block}"]	
+	security_group_id = aws_security_group.alb.id
+}
+
+resource "aws_security_group_rule" "alb_internal_inbound_http_all" {
+	count = var.internal ? 0 : 1
+
+	type = "ingress"
+	from_port = 80
+	to_port = 80
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]	
 	security_group_id = aws_security_group.alb.id
 }
 

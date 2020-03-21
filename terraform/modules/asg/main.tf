@@ -72,6 +72,26 @@ resource "aws_security_group_rule" "instance_inbound_http_all" {
   security_group_id = "${aws_security_group.instance_sg.id}"
 }
 
+resource "aws_security_group_rule" "instance_inbound_default_http" {
+  description = "HTTP access to instance"
+  type = "ingress"
+  from_port = 80
+  to_port = 80
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.instance_sg.id}"
+}
+
+resource "aws_security_group_rule" "instance_inbound_default_https" {
+  description = "HTTPS access to instance"
+  type = "ingress"
+  from_port = 443
+  to_port = 443
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.instance_sg.id}"
+}
+
 resource "aws_security_group_rule" "instance_inbound_ssh" {
   description = "SSH access to instance"
   type = "ingress"
@@ -99,10 +119,11 @@ resource "aws_lb_target_group" "app_iac_alb_target_group" {
   
   health_check { 
     path = "/" 
-    protocol = "HTTP" 
+    protocol = "HTTP"
+    port = "8080" 
     matcher = "200" 
     interval = 15
-    timeout = 3
+    timeout = 10
     healthy_threshold = 2
     unhealthy_threshold = 2
   }

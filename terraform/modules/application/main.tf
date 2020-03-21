@@ -21,7 +21,7 @@ resource "aws_route53_record" "lb_friendly_dns" {
   name = "test.${var.domain_name}"
   type = "CNAME"
   ttl = "300"
-  records = ["module.alb.alb_dns_name"]
+  records = ["${module.alb.alb_dns_name}"]
 }
 
 resource "aws_security_group_rule" "instance_inbound_http_restricted" {
@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "instance_inbound_http_restricted" {
   to_port = 8080
   protocol = "tcp"
   source_security_group_id = module.alb.lb_security_group_id
-  security_group_id = "${aws_security_group.instance_sg.id}"
+  security_group_id = "${module.asg.instance_security_group_id}"
 }
 
 module "asg" {
@@ -68,5 +68,5 @@ module "alb" {
 }
 
 data "aws_route53_zone" "alb_zone" {
-  name = "{$var.domain_name}."
+  name = "${var.domain_name}."
 }
