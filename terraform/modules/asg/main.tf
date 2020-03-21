@@ -107,5 +107,3 @@ resource "aws_lb_target_group" "app_iac_alb_target_group" {
     unhealthy_threshold = 2
   }
 }
-
-data ""
