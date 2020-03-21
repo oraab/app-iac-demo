@@ -51,19 +51,25 @@ else
 fi
 
 # verify go is installed and install if not
-if [[ $(go) == *"Go is a tool for managing Go source code"* ]]
+if [[ $(go 2>&1) == *"command not found"* ]]
 then 
-  echo "go installed on host; moving on."
-else 
   echo "go not installed on host - installing."
   brew update && brew install go 
+else 
+  echo "go installed on host; moving on."
 fi
 
 # create keypair for the application instances 
 cd $HOME/.ssh/
-ssh-keygen -t rsa -C app_iac_demo_key -f app_iac_demo_key.pem
 PUBKEY=$(pwd)/app_iac_demo_key.pem.pub
-aws ec2 import-key-pair --key_name app_iac_demo_key --public_key_material $(cat ${PUBKEY} | base64)
+if [ -z ${PUBKEY} ]
+then
+  echo "generating key pair for EC2 instances"
+  ssh-keygen -t rsa -C app_iac_demo_key -f app_iac_demo_key.pem
+  aws ec2 import-key-pair --key_name app_iac_demo_key --public_key_material $(cat ${PUBKEY} | base64)
+else 
+  echo "key pair already exists - moving on."
+fi
 
 # verify the env variables required for the state bucket and state lock
 if [ -z "$TF_VAR_tf_state_bucket" ]
@@ -84,7 +90,7 @@ then
   echo "state bucket already exists; moving on."
 else 
   echo "initializing terraform state (this will take a while if you don't have the AWS provider installed yet)";
-  cd $SCRIPT_HOME/live/global/s3/;
+  cd $SCRIPT_HOME/../terraform/live/global/s3/;
   terraform init;
   echo "running terraform plan to verify resources creation";
   if [[ $(terraform plan) == *"2 to add, 0 to change, 0 to destroy"* ]]

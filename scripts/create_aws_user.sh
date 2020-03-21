@@ -13,7 +13,7 @@ get_user_response=$(aws iam get-user --user-name $TF_VAR_user_name 2>&1)
 if [[ $get_user_response == *"NoSuchEntity"* ]]
 then 
   echo "creating user.";
-  cd live/global/iam/;
+  cd ../terraform/live/global/iam/;
   terraform init;
   echo "running terraform plan to verify resources creation";
   if [[ $(terraform plan) == *"10 to add, 0 to change, 0 to destroy"* ]]
