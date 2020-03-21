@@ -6,6 +6,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestAlbWithRestrictedAccess(t *testing.T) {
@@ -39,6 +40,12 @@ func createAlbOpts(t *testing.T, terraformDir string) *terraform.Options {
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
 			"vpc_name": fmt.Sprintf("%s-%s-vpc",t.Name(),random.UniqueId()),
+		},
+		MaxRetries: 3,
+		TimeBetweenRetries: 5 * time.Second,
+		RetryableTerraformErrors: map[string]string{
+			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
 		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,

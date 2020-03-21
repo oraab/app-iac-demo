@@ -42,6 +42,7 @@ func createAppOpts(t *testing.T, terraformDir string) *terraform.Options {
 		TimeBetweenRetries: 5 * time.Second,
 		RetryableTerraformErrors: map[string]string{
 			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
 		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,

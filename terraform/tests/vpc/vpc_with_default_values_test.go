@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestVpcWithDefaultValues(t *testing.T) {
@@ -32,6 +33,12 @@ func createVpcOptsWithDefaults(t *testing.T,
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
 			"environment": "staging",
+		},
+		MaxRetries: 3,
+		TimeBetweenRetries: 5 * time.Second,
+		RetryableTerraformErrors: map[string]string{
+			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
 		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,

@@ -26,6 +26,9 @@ func createEc2RoleOpts(t *testing.T, terraformDir string) *terraform.Options {
 
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
+		Vars: map[string]interface{}{
+			"": ,
+		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,
 			"key": stateKey,

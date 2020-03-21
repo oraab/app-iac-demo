@@ -6,6 +6,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestAsgWithLockedMinMaxInstances(t *testing.T) {
@@ -42,6 +43,12 @@ func createAsgOpts(t *testing.T, terraformDir string) *terraform.Options {
 
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
+		MaxRetries: 3,
+		TimeBetweenRetries: 5 * time.Second,
+		RetryableTerraformErrors: map[string]string{
+			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
+		},
 		BackendConfig:  getBackendConfig(t),
 	}
 

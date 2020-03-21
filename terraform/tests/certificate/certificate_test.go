@@ -6,6 +6,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestCertificateCreation (t *testing.T) {
@@ -49,6 +50,12 @@ func createCertOpts(t *testing.T, terraformDir string) *terraform.Options {
 		Vars: map[string]interface{}{
 			"domain_name": "testing-placeholder.xyz",
 			"environment": "staging",
+		},
+		MaxRetries: 3,
+		TimeBetweenRetries: 5 * time.Second,
+		RetryableTerraformErrors: map[string]string{
+			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
 		},
 		BackendConfig: getBackendConfig(t),
 	}

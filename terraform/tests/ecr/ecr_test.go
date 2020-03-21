@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestEcrCreation(t *testing.T) {
@@ -29,6 +30,12 @@ func createEcrOpts(t *testing.T, terraformDir string) *terraform.Options {
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
 			"name": strings.ToLower(fmt.Sprintf("%s-%s",t.Name(),random.UniqueId())),
+		},
+		MaxRetries: 3,
+		TimeBetweenRetries: 5 * time.Second,
+		RetryableTerraformErrors: map[string]string{
+			"RequestError: send request failed": "Instance may still be initializing",
+			"Error locking state": "lock was not acquired yet",
 		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,
