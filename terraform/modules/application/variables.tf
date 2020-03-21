@@ -36,6 +36,12 @@ variable "internal" {
 	default = false
 }
 
+variable "domain_name" {
+	description = "The domain name for which a certificate is issued to provide HTTPS connection to the ALB."
+	type = string
+	default = "testing-placeholder.xyz"
+}
+
 
 
 

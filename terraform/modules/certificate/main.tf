@@ -20,12 +20,13 @@ resource "aws_acm_certificate_validation" "alb_default_cert_validation" {
 resource "aws_route53_record" "alb_default_cert_validation_record" {
   name    = "${aws_acm_certificate.alb_default_cert.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.alb_default_cert.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.aws_route53_zone.alb_zone.id}"
+  zone_id = "${module.alb_zone.id}"
   records = ["${aws_acm_certificate.alb_default_cert.domain_validation_options.0.resource_record_value}"]
   ttl     = 60
 }
 
-data "aws_route53_zone" "alb_zone" {
-	name = "${var.domain_name}"
-	private_zone = false
+module "alb_zone" {
+	source = "../dns"
+
+	domain_name = "${var.domain_name}"
 }

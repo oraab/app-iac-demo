@@ -85,7 +85,7 @@ resource "aws_security_group_rule" "instance_outbound_all" {
 }
 
 resource "aws_lb_target_group" "app_iac_alb_target_group" { 
-  name = "${local.cluster_name}" 
+  name = "${local.cluster_name}-tg" 
   port = var.server_port 
   protocol = "HTTP" 
   vpc_id = var.vpc_id

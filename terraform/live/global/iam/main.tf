@@ -55,6 +55,11 @@ resource "aws_iam_group_policy_attachment" "app_iac_demo_runner_group_kms_limite
   policy_arn = "${aws_iam_policy.app_iac_demo_runner_kms_limited_access.arn}"
 }
 
+resource "aws_iam_group_policy_attachment" "app_iac_demo_runner_group_ecr_limited_access" {
+  group      = "${aws_iam_group.app_iac_demo_runner_group.name}"
+  policy_arn = "${aws_iam_policy.app_iac_demo_runner_ecr_limited_access.arn}"
+}
+
 resource "aws_iam_policy" "app_iac_demo_runner_certificate_limited_access" {
 	name = "app_iac_demo_runner_certificate_limited_access"
 	policy = "${data.aws_iam_policy_document.certificate_limited_access.json}"
@@ -101,6 +106,27 @@ data "aws_iam_policy_document" "kms_limited_access" {
 	statement {
 	  actions = [
         "kms:CreateGrant"
+	  ]
+	  resources = ["*"]
+	}
+}
+
+resource "aws_iam_policy" "app_iac_demo_runner_ecr_limited_access" {
+	name = "app_iac_demo_runner_ecr_limited_access"
+	policy = "${data.aws_iam_policy_document.ecr_limited_access.json}"
+}
+
+data "aws_iam_policy_document" "ecr_limited_access" {
+	statement {
+	  actions = [
+        "ecr:Get*",
+        "ecr:Describe*",
+        "ecr:List*",
+        "ecr:CreateRepository",
+        "ecr:DeleteRepository",
+        "ecr:PutImage",
+        "ecr:PutImageTagMutability",
+        "ecr:StartImageScan"
 	  ]
 	  resources = ["*"]
 	}

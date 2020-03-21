@@ -39,6 +39,7 @@ module "alb" {
   vpc_name = "${var.environment}-main"
   environment = var.environment
   internal = var.internal
+  domain_name = var.domain_name
 }
 
 

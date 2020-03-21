@@ -1,5 +1,5 @@
 locals {
-	success_status_code = "200"
+	page_not_found_status_code = "404"
 	http_port = "80"
 }
 
@@ -9,7 +9,6 @@ resource "aws_lb" "alb" {
 	load_balancer_type = "application" 
 	security_groups = ["${module.alb_security_group.security_group_id}"]
 	subnets = module.main_vpc.subnet_ids
-
     # this is in order to allow easy creation and destruction of this resource in tests
 	enable_deletion_protection = false
 
@@ -32,8 +31,8 @@ resource "aws_lb_listener" "http" {
 
       fixed_response {
         content_type = "text/plain"
-        message_body = "${local.success_status_code} OK"
-        status_code = "${local.success_status_code}"
+        message_body = "${local.page_not_found_status_code}: Page not found"
+        status_code = "${local.page_not_found_status_code}"
       }
     }
 }
@@ -63,15 +62,15 @@ resource "aws_lb_listener" "https" {
     port = "443"
     protocol = "HTTPS"
     ssl_policy        = "ELBSecurityPolicy-2016-08" # default - added it for explicitness
-    certificate_arn = 
+    certificate_arn = data.aws_acm_certificate.cert.arn
 
     default_action {
       type = "fixed-response"
 
       fixed_response {
         content_type = "text/plain"
-        message_body = "${local.success_status_code} OK"
-        status_code = "${local.success_status_code}"
+        message_body = "${local.page_not_found_status_code}: Page not found"
+        status_code = "${local.page_not_found_status_code}"
       }
     }
 }
