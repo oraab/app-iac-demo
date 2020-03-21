@@ -1,21 +1,7 @@
-variable "vpc_cidr_block" {
-	description = "The required CIDR block for the VPC (prefix will be 16, no need to add it)"
+variable "vpc_cidr_block_first_octets" {
+	description = "The required first two octets for the CIDR block of the VPC (CIDR block will be extended to full representation with 16 prefix)"
 	type = string
-	default = "10.0.0.0"
-}
-
-variable "main_subnet_cidr_block" {
-	description = "The required CIDR block for the main subnet within the VPC (prefix will be 24, no need to add it)" 
-	type = string
-	# the 10.0.1.0/32 IP address would be used by default as the DNS resolver, locking the third octet at 2 to avoid collisions
-	default = "10.0.2.0"
-}
-
-variable "alternate_az_subnet_cidr_block" {
-	description = "The required CIDR block for the alternate AZ subnet within the VPC (prefix will be 24, no need to add it)" 
-	type = string
-	# the 10.0.1.0/32 IP address would be used by default as the DNS resolver, locking the third octet at 3 to avoid collisions
-	default = "10.0.3.0"
+	default = "10.0"
 }
 
 variable "vpc_name" {

@@ -87,7 +87,5 @@ module "main_vpc" {
 	source = "../vpc"
 	vpc_name = var.vpc_name
 	environment = var.environment
-	vpc_cidr_block = var.vpc_cidr_block
-	main_subnet_cidr_block = var.main_subnet_cidr_block
-	alternate_az_subnet_cidr_block = var.alternate_az_subnet_cidr_block
+	vpc_cidr_block_first_octets = var.vpc_cidr_block_first_octets
 }

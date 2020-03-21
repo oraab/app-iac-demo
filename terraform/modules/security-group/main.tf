@@ -15,6 +15,17 @@ resource "aws_security_group_rule" "alb_internal_inbound_http" {
 	security_group_id = aws_security_group.alb.id
 }
 
+resource "aws_security_group_rule" "alb_internal_inbound_ssh" {
+	count = var.internal ? 1 : 0
+
+	type = "ingress" 
+	from_port = 22
+	to_port = 22
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+	security_group_id = aws_security_group.alb.id
+}
+
 resource "aws_security_group_rule" "alb_external_inbound_https" {
 	count = var.internal ? 0 : 1
 
@@ -25,6 +36,7 @@ resource "aws_security_group_rule" "alb_external_inbound_https" {
 	cidr_blocks = ["0.0.0.0/0"]
 	security_group_id = aws_security_group.alb.id
 }
+
 
 resource "aws_security_group_rule" "alb_external_outbound_all" {
 	type = "egress" 

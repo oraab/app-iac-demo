@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-	"strings"
+	"os"
 	"testing"
 )
 
@@ -12,10 +12,8 @@ func TestCertificateCreation (t *testing.T) {
 	zoneExampleDir := "../../examples/dns"
 	certExampleDir := "../../examples/certificate"
 
-	domainName := strings.ToLower(fmt.Sprintf("%s.%s.com",t.Name(),random.UniqueId()))
-
-	dnsOpts := createDnsOpts(t, zoneExampleDir, domainName)
-	certOpts := createCertOpts(t, certExampleDir, domainName)
+	dnsOpts := createDnsOpts(t, zoneExampleDir)
+	certOpts := createCertOpts(t, certExampleDir)
 	defer terraform.Destroy(t, certOpts)
 	defer terraform.Destroy(t, dnsOpts)
 
@@ -26,23 +24,21 @@ func TestCertificateCreation (t *testing.T) {
 
 }
 
-func createDnsOpts(t *testing.T, terraformDir string, domainName string) *terraform.Options {
-	t.Logf("domain_name: %s",domainName)
+func createDnsOpts(t *testing.T, terraformDir string) *terraform.Options {
 	return &terraform.Options{
 		TerraformDir: terraformDir,
 		Vars:  map[string]interface{}{
-			"domain_name": domainName,
+			"domain_name": "testing-placeholder.xyz",
 		},
 		BackendConfig: getBackendConfig(t),
 	}
 }
-func createCertOpts(t *testing.T, terraformDir string, domainName string) *terraform.Options {
-   t.Logf("domain_name: %s", domainName)
+func createCertOpts(t *testing.T, terraformDir string) *terraform.Options {
 
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
-			"domain_name": domainName,
+			"domain_name": "testing-placeholder.xyz",
 			"environment": "staging",
 		},
 		BackendConfig: getBackendConfig(t),
@@ -50,9 +46,8 @@ func createCertOpts(t *testing.T, terraformDir string, domainName string) *terra
 }
 
 func getBackendConfig(t *testing.T) map[string]interface{}{
-	// TODO: replace bucket and dynmaoDbTable with env vars
-	bucket := "app-iac-demo-state-2020-03-19"
-	dynamoDbTable := "app-iac-demo-lock-2020-03-19"
+	bucket := os.Getenv("TF_VAR_tf_state_bucket")
+	dynamoDbTable := os.Getenv("TF_VAR_tf_state_lock")
 	region := "us-east-1"
 	stateKey := fmt.Sprintf("%s/%s/terraform.tfstate",t.Name(),random.UniqueId())
 

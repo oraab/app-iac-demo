@@ -5,6 +5,7 @@ import (
 	http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -14,7 +15,7 @@ func TestApplication(t *testing.T) {
 	appExampleDir := "../../examples/application"
 
 	appOpts := createAppOpts(t, appExampleDir)
-	defer terraform.Destroy(t, appOpts)
+	//defer terraform.Destroy(t, appOpts)
 
 	terraform.InitAndApply(t, appOpts)
 
@@ -22,12 +23,12 @@ func TestApplication(t *testing.T) {
 }
 
 func createAppOpts(t *testing.T, terraformDir string) *terraform.Options {
-	// TODO: replace bucket and dynmaoDbTable with env vars
-	bucket := "app-iac-demo-state-2020-03-19"
-	dynamoDbTable := "app-iac-demo-lock-2020-03-19"
+	bucket := os.Getenv("TF_VAR_tf_state_bucket")
+	dynamoDbTable := os.Getenv("TF_VAR_tf_state_lock")
 	region := "us-east-1"
 	stateKey := fmt.Sprintf("%s/%s/terraform.tfstate",t.Name(),random.UniqueId())
 
+	t.Logf("bucket: %s; lock table: %s", bucket, dynamoDbTable)
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{

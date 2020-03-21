@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"os"
 	"testing"
 )
 
@@ -31,9 +32,8 @@ func testSecurityGroup(t *testing.T, exampleDir string) {
 
 
 func createSecurityGroupOpts(t *testing.T, terraformDir string) *terraform.Options {
-	// TODO: switch to env vars for reproducability
-	bucket := "app-iac-demo-state-2020-03-19"
-	dynamoDbTable := "app-iac-demo-lock-2020-03-19"
+	bucket := os.Getenv("TF_VAR_tf_state_bucket")
+	dynamoDbTable := os.Getenv("TF_VAR_tf_state_lock")
 	region := "us-east-1"
 	stateKey := fmt.Sprintf("%s/%s/terraform.tfstate",t.Name(),random.UniqueId())
 
