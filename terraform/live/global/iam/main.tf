@@ -122,11 +122,15 @@ data "aws_iam_policy_document" "ecr_limited_access" {
         "ecr:Get*",
         "ecr:Describe*",
         "ecr:List*",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:CompleteLayerUpload",
         "ecr:CreateRepository",
         "ecr:DeleteRepository",
+        "ecr:InitiateLayerUpload",
         "ecr:PutImage",
         "ecr:PutImageTagMutability",
-        "ecr:StartImageScan"
+        "ecr:StartImageScan",
+        "ecr:UploadLayerPart"
 	  ]
 	  resources = ["*"]
 	}

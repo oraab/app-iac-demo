@@ -71,7 +71,7 @@ resource "aws_security_group_rule" "instance_inbound_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = ["${var.ingress_cidr_block}"]
   security_group_id = "${aws_security_group.instance_sg.id}"
 }
 

@@ -4,6 +4,25 @@
 
 SCRIPT_HOME=$(pwd)
 
+# verify docker is installed and fail if not
+if [[ $(docker) == *"command not found"* ]]
+then
+  echo "docker not installed on host and cannot be installed with homebrew - halting script.";
+  exit 1
+fi
+
+if [[ $(less $HOME/.docker/config.json | grep "ecr-login") == *"ecr-login"* ]]
+then
+  echo "amazon-ecr-credential-helper installed on host; moving on."
+else 
+  echo "amazon-ecr-credential-helper not installed on host - installing."
+  brew update && brew install docker-credential-helper-ecr
+  echo "docker-credential-helper-ecr installed on host - note that this will require an additional config change that will need to be done manually. \
+        switch `credStore` in your docker `config.json` file to `ecr-login`.  Additionally you can add specific repo login credHelpers as indicated \
+        here: https://github.com/awslabs/amazon-ecr-credential-helper#Configuration.  Then run this script again."
+  exit 1;
+fi
+
 # verify terraform is installed and install if not 
 if [[ $(terraform) == *"init"* ]]
 then 
@@ -12,6 +31,7 @@ else
   echo "terraform not installed on host - installing.";
   brew update && brew install terraform 
 fi
+
 
 # verify aws CLI is intalled and install if not 
 if [[ $(aws --version) == *"aws-cli"* ]]

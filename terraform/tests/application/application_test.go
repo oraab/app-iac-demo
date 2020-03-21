@@ -32,7 +32,7 @@ func createAppOpts(t *testing.T, terraformDir string) *terraform.Options {
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
-			"ami": "ami-0f1a497415643bcbd", // ubuntu 18.04 with k8s 1.16.2
+			"ami": "ami-04ac550b78324f651", // ubuntu 16.04 official AMI
 			"environment": "staging",
 			"min_size": 1,
 			"max_size": 1,

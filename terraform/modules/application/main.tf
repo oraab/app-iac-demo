@@ -26,6 +26,7 @@ module "asg" {
 
   user_data = var.user_data
   vpc_id = module.alb.vpc_id
+  ingress_cidr_block = var.ingress_cidr_block
   
   subnet_ids = module.alb.subnet_ids
   health_check_type = "ELB"
@@ -40,6 +41,7 @@ module "alb" {
   environment = var.environment
   internal = var.internal
   domain_name = var.domain_name
+  ingress_cidr_block = var.ingress_cidr_block
 }
 
 

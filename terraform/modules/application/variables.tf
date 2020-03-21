@@ -42,7 +42,11 @@ variable "domain_name" {
 	default = "testing-placeholder.xyz"
 }
 
-
+variable "ingress_cidr_block" {
+	description = "The ingress IP or CIDR block that is restricted to access the internal application - will only be used if internal is set to true"
+	type = string
+	default = "0.0.0.0/0"
+}
 
 
 

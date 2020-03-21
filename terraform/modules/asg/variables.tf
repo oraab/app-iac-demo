@@ -51,3 +51,9 @@ variable "user_data" {
   description = "The server content that will upload onto the instances of the ASG"
   type = string 
 }
+
+variable "ingress_cidr_block" {
+  description = "The IP or CIDR block which is restricted to access the application - only used when internal is true"
+  type = string
+  default = "0.0.0.0/0"
+}
