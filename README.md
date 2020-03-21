@@ -38,6 +38,8 @@ It can be replaced with any code repository that contains a Dockerfile.
 
 ## future improvements  
 1. CI/CD through Github Actions 
+1. Additional testing of terraform apply results 
+1. terraform handling through Github PRs using atlantis
 
 
 

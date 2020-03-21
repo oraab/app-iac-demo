@@ -1,6 +1,6 @@
 resource "aws_iam_instance_profile" "launch_configuration_instance_profile" {
   name = "launch_configuration_instance_profile"
-  role = resource.aws_iam_role
+  role = aws_iam_role.launch_configuration_assume_role.id
 }
 
 resource "aws_iam_role" "launch_configuration_assume_role" {
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 	statement {
 	  actions = ["sts:AssumeRole"]
 
-	  principles {
+	  principals {
 	    type = "Service"
 	    identifiers = ["ec2.amazonaws.com"]
 	  }

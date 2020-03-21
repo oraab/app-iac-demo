@@ -17,7 +17,7 @@ resource "aws_launch_configuration" "app_iac_launch_config" {
 }
 
 module "instance_profile" {
-  source = "../ec2_role"
+  source = "../ec2-role"
 }
 
 resource "aws_autoscaling_group" "app_iac_autoscaling_group" {

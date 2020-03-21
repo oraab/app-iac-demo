@@ -9,7 +9,7 @@ import (
 )
 
 func TestInstanceProfileCreation(t *testing.T) {
-	ec2RoleExampleDir := "../../examples/ec2_role"
+	ec2RoleExampleDir := "../../examples/ec2-role"
 
 	ec2RoleOpts := createEc2RoleOpts(t, ec2RoleExampleDir)
 	defer terraform.Destroy(t, ec2RoleOpts)
