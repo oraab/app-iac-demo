@@ -30,3 +30,8 @@ variable "vpc_name" {
 	description = "Unique identifier for the VPC - will be used alognside environment to prevent name colission"
 	type = string
 }
+
+variable "domain_name" {
+	description = "The domain name for which a certificate was issued to allow HTTPS connection to the ALB"
+	type = string
+}

@@ -56,13 +56,14 @@ resource "aws_lb_listener" "http_reroute" {
     }
 }
 
-# this resource would become https listening on 443 but is set as HTTP for now
 resource "aws_lb_listener" "https" {
 	count = var.internal ? 0 : 1
     
     load_balancer_arn = "${aws_lb.alb.arn}"
-    port = "80"
-    protocol = "HTTP"
+    port = "443"
+    protocol = "HTTPS"
+    ssl_policy        = "ELBSecurityPolicy-2016-08" # default - added it for explicitness
+    certificate_arn = 
 
     default_action {
       type = "fixed-response"
@@ -88,4 +89,10 @@ module "main_vpc" {
 	vpc_name = var.vpc_name
 	environment = var.environment
 	vpc_cidr_block_first_octets = var.vpc_cidr_block_first_octets
+}
+
+data "aws_acm_certificate" "cert" {
+	domain = var.domain_name
+	types = ["AMAZON_ISSUED"]
+	most_recent = true
 }

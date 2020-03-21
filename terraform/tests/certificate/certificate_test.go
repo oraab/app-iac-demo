@@ -24,6 +24,10 @@ func TestCertificateCreation (t *testing.T) {
 
 }
 
+/*
+ this test is not reproducible as it is due to the nature of certificate provisioning - replace the domain_name
+ below with another registered domain_name to reproduce
+*/
 func createDnsOpts(t *testing.T, terraformDir string) *terraform.Options {
 	return &terraform.Options{
 		TerraformDir: terraformDir,
@@ -33,6 +37,11 @@ func createDnsOpts(t *testing.T, terraformDir string) *terraform.Options {
 		BackendConfig: getBackendConfig(t),
 	}
 }
+
+/*
+ this test is not reproducible as it is due to the nature of certificate provisioning - replace the domain_name
+ below with another registered domain_name to reproduce
+*/
 func createCertOpts(t *testing.T, terraformDir string) *terraform.Options {
 
 	return &terraform.Options{
