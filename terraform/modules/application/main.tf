@@ -1,5 +1,21 @@
-resource "aws_lb_listener_rule" "asg" {
-  listener_arn = module.alb.alb_listener_arn
+resource "aws_lb_listener_rule" "asg_http" {
+  listener_arn = module.alb.alb_http_listener_arn
+  priority = 100 
+
+  condition { 
+    path_pattern {
+      values = ["*"]
+    }
+  }
+
+  action { 
+    type = "forward" 
+    target_group_arn = module.asg.target_group_arn
+  }
+}
+
+resource "aws_lb_listener_rule" "asg_https" {
+  listener_arn = module.alb.alb_https_listener_arn
   priority = 100 
 
   condition { 

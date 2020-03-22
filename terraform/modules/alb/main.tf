@@ -18,11 +18,11 @@ resource "aws_lb" "alb" {
 
 }
 
-resource "aws_lb_listener" "http" {
+resource "aws_lb_listener" "http_internal" {
 	count = var.internal ? 1 : 0
     
     load_balancer_arn = "${aws_lb.alb.arn}"
-    port = "80"
+    port = "8080"
     protocol = "HTTP"
 
     default_action {
@@ -63,6 +63,24 @@ resource "aws_lb_listener" "https" {
     ssl_policy        = "ELBSecurityPolicy-2016-08" # default - added it for explicitness
     certificate_arn = data.aws_acm_certificate.cert.arn
 
+    default_action {
+      type = "fixed-response"
+
+      fixed_response {
+        content_type = "text/plain"
+        message_body = "${local.page_not_found_status_code}: Page not found"
+        status_code = "${local.page_not_found_status_code}"
+      }
+    }
+}
+
+resource "aws_lb_listener" "http_external" {
+	count = var.internal ? 0 : 1
+    
+    load_balancer_arn = "${aws_lb.alb.arn}"
+    port = "8080"
+    protocol = "HTTP"
+    
     default_action {
       type = "fixed-response"
 

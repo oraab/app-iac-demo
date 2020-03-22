@@ -14,7 +14,7 @@ module "staging_application" {
 }
 
 data "template_file" "user_data" {
-  template = file("${path.cwd}/post_deploy.sh")
+  template = file("${path.cwd}/rendered_post_deploy.sh")
   
   vars = {
     ecr_repo = var.ecr_repo
