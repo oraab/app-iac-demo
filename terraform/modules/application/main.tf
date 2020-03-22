@@ -40,18 +40,6 @@ resource "aws_route53_record" "lb_friendly_dns" {
   records = ["${module.alb.alb_dns_name}"]
 }
 
-resource "aws_security_group_rule" "instance_inbound_http_restricted" {
-  count = var.environment == "staging" ? 1 : 0
-
-  description = "HTTP access to instance"
-  type = "ingress"
-  from_port = 8080
-  to_port = 8080
-  protocol = "tcp"
-  source_security_group_id = module.alb.lb_security_group_id
-  security_group_id = "${module.asg.instance_security_group_id}"
-}
-
 module "asg" {
   source = "../asg"
   
@@ -61,6 +49,8 @@ module "asg" {
 
   min_size = var.min_size 
   max_size = var.max_size 
+
+  role_name = var.role_name
 
   user_data = var.user_data
   vpc_id = module.alb.vpc_id

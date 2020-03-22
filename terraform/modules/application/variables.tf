@@ -53,3 +53,9 @@ variable "vpc_cidr_block_first_octets" {
 	type = string
 	default = "172.20"
 }
+
+variable "role_name" {
+	description = "The prefix for the name of the assume role and instance profile for the launch configuration" 
+	type = string 
+	default = "launch_configuration"
+}

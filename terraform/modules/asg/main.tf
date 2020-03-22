@@ -63,8 +63,6 @@ resource "aws_security_group" "instance_sg" {
 }
 
 resource "aws_security_group_rule" "instance_inbound_http_all" {
-  count = var.environment == "production" ? 1 : 0
-
   description = "HTTP access to instance"
   type = "ingress"
   from_port = 8080
@@ -124,8 +122,8 @@ resource "aws_lb_target_group" "app_iac_alb_target_group" {
     protocol = "HTTP"
     port = "8080" 
     matcher = "200" 
-    interval = 15
-    timeout = 10
+    interval = 35
+    timeout = 30
     healthy_threshold = 2
     unhealthy_threshold = 2
   }
