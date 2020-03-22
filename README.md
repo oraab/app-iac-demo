@@ -7,7 +7,7 @@ Performs the following:
 1. provides a build and deployment pipeline through `makefile` and `docker push/pull` to/from ECR.  The deployment is done through template on the launch configurations which runs a post deploy script that pulls the docker image from ECR and runs it, deploying a small web server (as demo, can be replaced by anything with `Dockerfile`).  The launch configuration and ASG are set up to change and be recreated with every deployment. 
 1. Staging environment is blocked for internal usage by inclusion of specific IP (provided within application infra config) to be added to the security group ingress of the ALB and the instances 
 1. The instances are accessible by SSH for direct installation of whatever is required (although the application instances already have `curl`, `htop` and `tcpdump`)
-1. Production environment includes two instances behind a load balancer accessible through HTTPS connection using the registered domain provided. 
+1. Production environment includes two instances behind a load balancer accessible through HTTPS connection using the registered domain provided (the friendly DNS name to access would be `https://test.<your domain name>/`)
 
 ## pre-requisites 
 1. *AWS IAM user* that has the relevant permissions to create resources for this app.  A user can be created for you when you run `scripts/create_aws_user.sh`, but it also assumes that you have an AWS IAM user with relevant credentials on your machine that can create a user with relevant permissions on IAM.
