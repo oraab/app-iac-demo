@@ -3,7 +3,7 @@ module "staging_application" {
 	source = "../../../modules/application"
 
 	environment = "staging"
-    ami = "ami-04ac550b78324f651" # replace this with a different var if you need 
+    ami = "ami-0f1a497415643bcbd" # replace this with a different var if you need 
     min_size = 1 
     max_size = 1 
     instance_type = "t2.micro"
