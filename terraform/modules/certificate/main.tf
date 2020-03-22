@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "alb_default_cert" {
-	domain_name = "${var.domain_name}" 
+	domain_name = "*.${var.domain_name}" 
 	validation_method = "DNS"
 
 	tags = {

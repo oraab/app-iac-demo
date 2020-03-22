@@ -21,8 +21,6 @@ func TestCertificateCreation (t *testing.T) {
 	terraform.InitAndApply(t, dnsOpts)
 	terraform.InitAndApply(t, certOpts)
 
-	// TODO: add validation for certificate creation
-
 }
 
 /*

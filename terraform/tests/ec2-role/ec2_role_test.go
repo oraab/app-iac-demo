@@ -27,7 +27,7 @@ func createEc2RoleOpts(t *testing.T, terraformDir string) *terraform.Options {
 	return &terraform.Options{
 		TerraformDir:             terraformDir,
 		Vars: map[string]interface{}{
-			"": ,
+			"name": fmt.Sprintf("%s-%s",t.Name(),random.UniqueId()),
 		},
 		BackendConfig:            map[string]interface{}{
 			"bucket": bucket,

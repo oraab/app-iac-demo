@@ -4,7 +4,7 @@ resource "aws_iam_instance_profile" "launch_configuration_instance_profile" {
 }
 
 resource "aws_iam_role" "launch_configuration_assume_role" {
-	name = "l${var.name}_assume_role"
+	name = "${var.name}_assume_role"
 	path = "/"
 
 	assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"

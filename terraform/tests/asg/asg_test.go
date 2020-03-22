@@ -22,7 +22,6 @@ func TestAsgWithLockedMinMaxInstances(t *testing.T) {
 	terraform.InitAndApply(t, albOpts)
 	terraform.InitAndApply(t, asgOpts)
 
-	// TODO: add validation test for ASG
 }
 
 func createAlbOpts(t *testing.T, terraformDir string) *terraform.Options {
