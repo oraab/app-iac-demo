@@ -7,8 +7,8 @@ domain_name=$4
 
 # copying post_deploy script to the live folder (instead of multiple copies) so that there's only one source of truth for this script
 cp post_deploy.sh.tpl rendered_post_deploy.sh
-cat "docker pull ${ecr_repo}/${image_tag}" >> rendered_post_deploy.sh
-cat "nohup docker run -p 8080:8080 ${ecr_repo}/${image_tag} &" >> rendered_post_deploy.sh
+echo "docker pull ${ecr_repo}/${image_tag}" >> rendered_post_deploy.sh
+echo "nohup docker run -p 8080:8080 ${ecr_repo}/${image_tag} &" >> rendered_post_deploy.sh
 cp rendered_post_deploy.sh $(pwd)/../terraform/live/${environment}/application/
 cd $(pwd)/../terraform/live/${environment}/application/
 
