@@ -7,7 +7,7 @@ import (
 )
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Generic web app server says it's A-OK. You requested: %s",r.URL.Path[1:])
+	fmt.Fprintf(w, "Generic web app server says it's A-OK. You requested: %s\n",r.URL.Path[1:])
 }
 
 func main() {
