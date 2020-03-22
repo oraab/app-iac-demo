@@ -10,7 +10,7 @@ module "asg" {
 
     role_name = var.role_name
 
-    user_data = templatefile(${path.cwd}/user-data.sh", { server_port = "8080" })
+    user_data = templatefile("${path.cwd}/user-data.sh", { server_port = "8080" })
 
 }
 

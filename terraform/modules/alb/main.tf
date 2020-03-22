@@ -108,7 +108,7 @@ module "main_vpc" {
 }
 
 data "aws_acm_certificate" "cert" {
-	domain = var.domain_name
+	domain = "${var.domain_name}"
 	types = ["AMAZON_ISSUED"]
 	most_recent = true
 }

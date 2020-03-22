@@ -50,7 +50,7 @@ func createAsgOpts(t *testing.T, terraformDir string) *terraform.Options {
 		},
 		Vars: map[string]interface{}{
 			"role_name": fmt.Sprintf("%s-%s",t.Name(),random.UniqueId()),
-			"environment": fmt.Sprintf("%s-%s",t.Name(),random.UniqueId()),
+			"environment": fmt.Sprintf("%s",random.UniqueId()),
 		},
 		BackendConfig:  getBackendConfig(t),
 	}
