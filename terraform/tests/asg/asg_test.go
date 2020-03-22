@@ -48,6 +48,10 @@ func createAsgOpts(t *testing.T, terraformDir string) *terraform.Options {
 			"RequestError: send request failed": "Instance may still be initializing",
 			"Error locking state": "lock was not acquired yet",
 		},
+		Vars: map[string]interface{}{
+			"role_name": fmt.Sprintf("%s-%s",t.Name(),random.UniqueId()),
+			"environment": fmt.Sprintf("%s-%s",t.Name(),random.UniqueId()),
+		},
 		BackendConfig:  getBackendConfig(t),
 	}
 

@@ -57,3 +57,9 @@ variable "ingress_cidr_block" {
   type = string
   default = "0.0.0.0/0"
 }
+
+variable "role_name" {
+  description = "The prefix for the name of the role and instance profile that will be created for the launch configuration"
+  type = string
+  default = "launch_configuration"
+}

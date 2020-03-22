@@ -15,6 +15,17 @@ resource "aws_security_group_rule" "alb_internal_inbound_http_restricted" {
 	security_group_id = aws_security_group.alb.id
 }
 
+resource "aws_security_group_rule" "alb_internal_inbound_8080_restricted" {
+	count = var.internal ? 1 : 0
+
+	type = "ingress"
+	from_port = 8080
+	to_port = 8080
+	protocol = "tcp"
+	cidr_blocks = ["${var.ingress_cidr_block}"]	
+	security_group_id = aws_security_group.alb.id
+}
+
 resource "aws_security_group_rule" "alb_internal_inbound_http_all" {
 	count = var.internal ? 0 : 1
 
@@ -44,7 +55,7 @@ resource "aws_security_group_rule" "alb_internal_inbound_ssh" {
 	from_port = 22
 	to_port = 22
 	protocol = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
+	cidr_blocks = ["${var.ingress_cidr_block}"]	
 	security_group_id = aws_security_group.alb.id
 }
 

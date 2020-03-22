@@ -18,6 +18,8 @@ resource "aws_launch_configuration" "app_iac_launch_config" {
 
 module "instance_profile" {
   source = "../ec2-role"
+
+  name = var.role_name
 }
 
 resource "aws_autoscaling_group" "app_iac_autoscaling_group" {
@@ -51,7 +53,7 @@ resource "aws_autoscaling_group" "app_iac_autoscaling_group" {
 }
 
 resource "aws_security_group" "instance_sg" {
-  name = "instance_sg"
+  name = "${local.cluster_name}-sg"
   vpc_id = var.vpc_id
 
   tags = {
@@ -98,7 +100,7 @@ resource "aws_security_group_rule" "instance_inbound_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = ["${var.ingress_cidr_block}"]
+  cidr_blocks = ["0.0.0.0/0"]
   security_group_id = "${aws_security_group.instance_sg.id}"
 }
 

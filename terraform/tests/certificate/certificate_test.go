@@ -5,6 +5,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -31,7 +32,7 @@ func createDnsOpts(t *testing.T, terraformDir string) *terraform.Options {
 	return &terraform.Options{
 		TerraformDir: terraformDir,
 		Vars:  map[string]interface{}{
-			"domain_name": "testing-placeholder.xyz",
+			"domain_name": strings.ToLower(fmt.Sprintf("%s.%s",t.Name(),random.UniqueId())),
 		},
 		BackendConfig: getBackendConfig(t),
 	}
