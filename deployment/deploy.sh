@@ -6,7 +6,7 @@ tag_name=$3
 domain_name=$4
 
 # copying post_deploy script to the live folder (instead of multiple copies) so that there's only one source of truth for this script
-cp post_deploy.sh $(pwd)/../terraform/live/${environment}/application/
+cp post_deploy.sh.tpl $(pwd)/../terraform/live/${environment}/application/
 cd $(pwd)/../terraform/live/${environment}/application/
 
 echo "Deploying application to ${environment}"

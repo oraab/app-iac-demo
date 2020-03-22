@@ -9,14 +9,5 @@ module "production_application" {
     instance_type = "t2.micro"
     vpc_cidr_block_first_octets = "172.21"
 
-    user_data = "${data.template_file.user_data.rendered}" 
-}
-
-data "template_file" "user_data" {
-  template = "${file("${path.cwd}/post_deploy.sh")}"
-  
-   vars = {
-    ecr_repo = "${var.ecr_repo}"
-    image_tag = "${var.image_tag}"
-  }
+    user_data = templatefile("${path.cwd}/post_deploy.sh.tpl", { ecr_repo = var.ecr_repo, image_tag = var.image_tag }
 }
