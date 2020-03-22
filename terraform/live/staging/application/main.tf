@@ -10,14 +10,5 @@ module "staging_application" {
     internal = true
     ingress_cidr_block = "141.226.14.213/32" # replace this with your own IP if you need
 	vpc_cidr_block_first_octets = "172.20"
-    user_data = data.template_file.user_data.rendered 
-}
-
-data "template_file" "user_data" {
-  template = file("${path.cwd}/rendered_post_deploy.sh")
-  
-  vars = {
-    ecr_repo = var.ecr_repo
-    image_tag = var.image_tag
-  }
+    user_data = templatefile("${path.cwd}/rendered_post_deploy.sh", { ecr_repo = var.ecr_repo, image_tag = var.image_tag })
 }
